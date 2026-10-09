@@ -1,22 +1,39 @@
 # Kenny Launcher для NixOS
 
-Готовая тестовая версия **9.6.1-dev**, NixOS **x86_64**. Java и библиотеки включены; собирать исходники не нужно. Нужны рабочий графический интерфейс, интернет и около 6 ГБ свободного места без учёта Minecraft.
+Пакет **9.6.1-dev**, **x86_64-linux**. Qt включён в пакет, Java 8/17/21/25 и системные библиотеки устанавливает Nix.
 
-Установка из терминала обычного пользователя:
-
-```bash
-curl -fLO https://github.com/Tuxeodoman/kenny-launcher-nixos/releases/download/v9.6.1-dev-nixos/install.sh
-bash install.sh
-```
-
-Запускайте **Kenny Launcher Dev** из меню приложений или:
+Запуск:
 
 ```bash
-~/.local/bin/kenny-launcher-nixos
+nix run github:Tuxeodoman/kenny-launcher-nixos
 ```
 
-Войдите в свой аккаунт и скачайте нужную сборку. Проверены Vanilla 1.21.1 и защищённая Avaloria с Connector на NixOS 26.05/X11.
+Для конфигурации с flakes добавьте вход:
 
-Если в VMware не видны блоки: закройте игру и в `minecraft/config/sodium-options.json` установите `advanced.use_advanced_staging_buffers` в `false`, предварительно сохранив копию файла.
+```nix
+inputs.kenny-launcher.url = "github:Tuxeodoman/kenny-launcher-nixos";
+```
 
-Для Ubuntu/Mint предназначен отдельный пакет; этот установщик рассчитан только на NixOS.
+И пакет в модуль NixOS (передайте `inputs` через `specialArgs`):
+
+```nix
+environment.systemPackages = [
+  inputs.kenny-launcher.packages.${pkgs.stdenv.hostPlatform.system}.default
+];
+```
+
+В Home Manager используйте тот же пакет в `home.packages`.
+
+Без flakes: сохраните `kenny-launcher.nix` рядом с конфигурацией и добавьте:
+
+```nix
+nixpkgs.config.allowUnfreePredicate = pkg: pkgs.lib.getName pkg == "kenny-launcher";
+environment.systemPackages = [ (pkgs.callPackage ./kenny-launcher.nix { }) ];
+```
+
+Запускайте `kenny-launcher` или откройте **Kenny Launcher Dev** в меню приложений. Затем войдите в свой аккаунт и скачайте сборку.
+Обновление выполняется через обновление flake/пакета и обычный `nixos-rebuild`; встроенное обновление лаунчера отключено.
+
+Старый архив NAR и `install.sh` остаются в релизе для переноса уже собранного окружения.
+
+Проверено на NixOS 26.05, X11: `nix build`, `nix flake check`, запуск защищённой Avaloria, мир и карта. Для VMware отключите «Постоянный буфер памяти» в настройках Sodium, если не видны блоки.

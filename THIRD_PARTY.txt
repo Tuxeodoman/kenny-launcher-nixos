@@ -1,4 +1,4 @@
-Пакет содержит бинарные зависимости Nixpkgs 7c8764b7c7b09b34f632464276218ef9090eaa11.
+Старый архив NAR содержит бинарные зависимости Nixpkgs 7c8764b7c7b09b34f632464276218ef9090eaa11.
 Определения пакетов, ссылки на исходники и лицензии:
 https://github.com/NixOS/nixpkgs/tree/7c8764b7c7b09b34f632464276218ef9090eaa11
 
@@ -6,3 +6,9 @@ https://github.com/NixOS/nixpkgs/tree/7c8764b7c7b09b34f632464276218ef9090eaa11
 (GPL с Classpath Exception), OpenSSL, 7-Zip и системные библиотеки.
 Лицензии отдельных компонентов сохраняются в соответствующих путях /nix/store.
 Полный список путей пакета — closure-paths.txt.
+
+The declarative package uses the verified 9.6.1-dev Linux binary archive.
+Its Qt and dependency license texts are preserved in
+libexec/kenny-launcher/licenses; source references are in
+libexec/kenny-launcher/THIRD_PARTY.txt. Java is supplied by Nixpkgs.
+The exact Nixpkgs revision is recorded in flake.lock.
